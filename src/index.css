@@ -3,7 +3,7 @@
    =================================== */
 :root {
     /* Colors - Light Theme */
-    --bg-primary: #d1c4ae;
+    --bg-primary: #ffffff;
     --bg-secondary: #ffffff;
     --bg-cream: #92b9d9;
     --bg-card: #ffffff;
@@ -188,7 +188,8 @@ button {
     padding: 16px 24px;
     background: transparent;
     border-radius: 24px;
-    border: 1px solid transparent;
+    border: none;
+    /* Hidden on main page */
     transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     /* Smooth 'join' ease */
     display: flex;
@@ -208,6 +209,8 @@ button {
     -webkit-backdrop-filter: blur(24px);
     border-radius: 100px;
     border: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    /* Visible separation when floating */
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05),
         inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
@@ -963,8 +966,8 @@ button {
 .section-header {
     text-align: center;
     max-width: 600px;
-    margin: 0 auto 30px;
-    /* Reduced from 60px */
+    margin: 0 auto 55px;
+    /* Restored to 60px per user request */
 }
 
 .section-tag {
@@ -1004,37 +1007,56 @@ button {
 /* Wrapper with background - creates the rounded container */
 .device-image-wrapper {
     position: relative;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    max-width: 1072px;
+    /* Fixed width from reference */
+    aspect-ratio: 1072 / 700;
+    /* Fixed aspect ratio from reference */
+
     background: linear-gradient(135deg, #e8d5c4 0%, #d4b5a0 100%);
     border-radius: 40px;
-    padding: 60px;
+    padding: 0;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    /* Ensure content respects border radius */
 }
 
 /* Device Toggle Controls - positioned at bottom of wrapper */
 .device-toggle-container {
     position: absolute;
-    bottom: 50px;
+    bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 4px;
-    padding: 6px;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    gap: 8px;
+    /* Increased gap */
+    padding: 8px;
+
+    /* Dark Glass Effect */
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
     border-radius: 100px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     z-index: 10;
 }
 
 .device-toggle-btn {
-    padding: 12px 28px;
+    padding: 12px 32px;
     border-radius: 100px;
-    border: none;
+
+    /* Default Inactive State */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    /* Thin light border */
     background: transparent;
-    color: var(--text-secondary);
+    color: rgba(255, 255, 255, 0.9);
+
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
@@ -1042,26 +1064,62 @@ button {
 }
 
 .device-toggle-btn.active {
-    background: #1a1a1a;
+    background: #111;
+    /* Solid Dark/Black */
     color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: #111;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .device-toggle-btn:hover:not(.active) {
-    background: rgba(0, 0, 0, 0.05);
-    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: white;
 }
 
-/* Device Display Image (iPad/Web App view) */
+/* TRACK SYSTEM for Linked Sliding */
+.device-track {
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+    /* Combine Scaling (Scroll) + Sliding (Toggle) */
+    transform: scale(var(--scale, 1)) translateX(var(--slide-x, 0));
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    /* Smooth slider ease */
+
+    /* Ensure hardware acceleration */
+    will-change: transform;
+}
+
+/* Track States */
+.device-track.view-mobile {
+    --slide-x: 0%;
+    /* Show first image (Mobile) */
+}
+
+.device-track.view-web {
+    --slide-x: -100%;
+    /* Slide left to show second image (Web) */
+}
+
+/* Device Images Logic */
 .device-display-image {
     width: 100%;
-    height: auto;
-    max-width: 1200px;
-    /* Much larger to match reference */
-    object-fit: contain;
-    transition: transform 0.15s ease-out;
-    border-radius: 30px;
-    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+}
+
+/* Mobile Image: Positioned First (Left) */
+.device-display-image.mobile-img {
+    left: 0;
+}
+
+/* Web Image: Positioned Second (Right) */
+.device-display-image.web-img {
+    left: 100%;
 }
 
 .mobile-placeholder {
@@ -1203,29 +1261,41 @@ button {
 .feature-tag {
     display: inline-block;
     font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    color: var(--accent-brown);
-    margin-bottom: 16px;
+    font-weight: 700;
+    /* Extra bold */
+    letter-spacing: 0.12em;
+    /* Wider spacing */
+    color: #A08C5B;
+    /* Specific Brown/Gold from reference */
+    margin-bottom: 20px;
+    text-transform: uppercase;
 }
 
 .feature-title {
-    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-size: clamp(2.5rem, 5vw, 3.8rem);
+    /* Larger max size */
     font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 20px;
+    line-height: 1.05;
+    /* Tighter leading for "poster" look */
+    margin-bottom: 24px;
     color: var(--text-primary);
+    letter-spacing: -0.03em;
 }
 
 .feature-description {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    line-height: 1.7;
-    margin-bottom: 28px;
+    font-size: 1.125rem;
+    /* 18px standard */
+    color: #4b5563;
+    /* Specific cool gray */
+    line-height: 1.6;
+    margin-bottom: 40px;
+    /* More breathing room before button */
+    max-width: 480px;
 }
 
 .feature-description strong {
     color: var(--text-primary);
+    font-weight: 600;
 }
 
 .feature-tabs {
@@ -1789,4 +1859,156 @@ button {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--text-tertiary);
+}
+
+/* ===================================
+   Projects Section Redesign
+   =================================== */
+
+/* Specific Grid Layout for Projects Section */
+/* Overrides generic .feature-grid for this section to match specific dimensions */
+#projects .feature-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    /* approx 588px / 420px ratio */
+    gap: 60px;
+    align-items: stretch;
+    /* Stretch columns to equal height */
+
+    /* Constraint width to match Devices container */
+    max-width: 1072px;
+    margin: 0 auto;
+}
+
+#projects {
+    padding-top: 40px;
+    /* Reduced top spacing */
+}
+
+#projects .feature-content {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+
+#projects .btn-black {
+    margin-bottom: auto;
+    /* Push content below to the bottom */
+}
+
+/* Mobile responsive override */
+@media (max-width: 968px) {
+    #projects .feature-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.projects-image-container {
+    width: 100%;
+    /* max-width: 588px;  Implicit via grid */
+    position: relative;
+    border-radius: 30px;
+    overflow: hidden;
+    transition: transform 0.5s ease;
+
+    /* Gradient Background matching reference */
+    background: linear-gradient(180deg, #A2C4F0 0%, #E8D5C4 100%);
+    padding: 50px;
+}
+
+.projects-image-container:hover {
+    transform: none;
+    /* Disable hover movement as requested */
+}
+
+.projects-dashboard-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+    /* Radius for the inner image */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    /* Soft shadow */
+}
+
+/* Black Button Variant */
+/* Black Button Variant */
+/* Black Button Variant */
+.btn-black {
+    display: inline-flex;
+    align-self: flex-start;
+    /* CRITICAL: Prevent flex stretch */
+    align-items: center;
+    justify-content: center;
+    padding: 18px 48px;
+    background: #1D1D1F;
+    color: white;
+    font-weight: 500;
+    font-size: 1rem;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+    margin-bottom: auto;
+    margin-top: 24px;
+}
+
+.btn-black:hover {
+    background: #000;
+    /* Pure black on hover */
+    transform: scale(1.02);
+    /* Subtle scale instead of lift */
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    /* Reduced shadow */
+}
+
+.btn-black:hover {
+    background: #2a2a2a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+/* Feature Pills Grid */
+.projects-features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    width: 100%;
+}
+
+.project-feature-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: white;
+    border: 1px solid var(--border-light);
+    border-radius: 100px;
+    /* Pill shape */
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: default;
+    transition: all 0.2s ease;
+}
+
+.project-feature-item:hover {
+    border-color: var(--accent-primary);
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.project-feature-item i {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+    .projects-features-grid {
+        grid-template-columns: 1fr;
+    }
 }
