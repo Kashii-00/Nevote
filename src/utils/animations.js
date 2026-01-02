@@ -184,7 +184,12 @@ export function initAnimations() {
                 const viewportCenter = window.innerHeight / 2;
 
                 const distanceFromCenter = elementBaseCenter - viewportCenter;
-                const yOffset = distanceFromCenter * speed * -1;
+                let yOffset = distanceFromCenter * speed * -1;
+
+                // Apply Optional Clamping
+                const min = el.dataset.parallaxMin ? parseFloat(el.dataset.parallaxMin) : -Infinity;
+                const max = el.dataset.parallaxMax ? parseFloat(el.dataset.parallaxMax) : Infinity;
+                yOffset = Math.max(min, Math.min(max, yOffset));
 
                 // Store for next frame
                 el._parallaxY = yOffset;

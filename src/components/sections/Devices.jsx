@@ -19,8 +19,9 @@ const Devices = () => {
             const visibleEnd = rect.height + windowHeight;
             const scrollProgress = Math.max(0, Math.min(1, visibleStart / visibleEnd));
 
-            // Scale from 1.45 (zoomed in) to 1.0 (normal) as container comes into view
-            const scale = 1.45 - (scrollProgress * 0.45);
+            // Scale from 1.25 (clearly zoomed in) to 1.0 (normal)
+            const maxZoom = 1.25;
+            const scale = maxZoom - (scrollProgress * (maxZoom - 1));
             setScrollScale(scale);
         };
 
