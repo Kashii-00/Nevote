@@ -170,16 +170,24 @@ export function initAnimations() {
 
         updateParallax(scrollY) {
             // Generic Parallax
+            // Generic Parallax
             const parallaxElements = document.querySelectorAll('[data-parallax]');
             parallaxElements.forEach(el => {
                 const speed = parseFloat(el.dataset.parallax) || 0.5;
-                const rect = el.getBoundingClientRect(); // rect is screen-relative
-                // Original logic: distanceFromCenter = elementCenter - viewportCenter
-                const windowHeight = window.innerHeight;
-                const elementCenter = rect.top + rect.height / 2;
-                const viewportCenter = windowHeight / 2;
-                const distanceFromCenter = elementCenter - viewportCenter;
+                const rect = el.getBoundingClientRect(); // rect includes current transform!
+
+                // Retrieve the previously applied offset from a property (more stable than parsing string)
+                const prevOffset = el._parallaxY || 0;
+
+                // Calculate natural center by removing the previous offset
+                const elementBaseCenter = (rect.top - prevOffset) + (rect.height / 2);
+                const viewportCenter = window.innerHeight / 2;
+
+                const distanceFromCenter = elementBaseCenter - viewportCenter;
                 const yOffset = distanceFromCenter * speed * -1;
+
+                // Store for next frame
+                el._parallaxY = yOffset;
                 el.style.transform = `translate3d(0, ${yOffset}px, 0)`;
             });
 
@@ -220,10 +228,18 @@ export function initAnimations() {
 
         onResize() {
             if (this.wrapper) {
-                document.body.style.height = `${this.wrapper.getBoundingClientRect().height}px`;
-                this.calculateMaxScroll();
-                this.target = Math.min(this.target, this.maxScroll);
-                this.current = Math.min(this.current, this.maxScroll);
+                // Force layout update
+                const height = this.wrapper.getBoundingClientRect().height;
+                if (height > 0) {
+                    document.body.style.height = `${height}px`;
+                    this.calculateMaxScroll();
+                    this.target = Math.min(this.target, this.maxScroll);
+                    this.current = Math.min(this.current, this.maxScroll);
+
+                    // Force re-render of transform to prevent glitch
+                    const rounded = Math.round(this.current * 100) / 100;
+                    this.wrapper.style.transform = `translate3d(0, ${-rounded}px, 0)`;
+                }
             }
         }
 

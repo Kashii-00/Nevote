@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ipadProImage from '../../assets/pfcMvn2yqXD2Cl6VWthMkHlhaKQ.png';
+import mobileViewImage from '../../assets/mobileview.png';
 
 const Devices = () => {
     const [activeView, setActiveView] = useState('mobile'); // 'mobile' or 'web'
@@ -18,15 +19,19 @@ const Devices = () => {
             const visibleEnd = rect.height + windowHeight;
             const scrollProgress = Math.max(0, Math.min(1, visibleStart / visibleEnd));
 
-            // Scale from 0.8 to 1.1 based on scroll
-            const scale = 0.8 + (scrollProgress * 0.3);
+            // Scale from 1.45 (zoomed in) to 1.0 (normal) as container comes into view
+            const scale = 1.45 - (scrollProgress * 0.45);
             setScrollScale(scale);
         };
 
         window.addEventListener('scroll', handleScroll);
+        window.addEventListener('smoothscroll', handleScroll); // Custom smooth scroll event
         handleScroll(); // Initial calculation
 
-        return () => window.removeEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('smoothscroll', handleScroll);
+        };
     }, []);
 
     return (
@@ -71,28 +76,35 @@ const Devices = () => {
 
             <div className="section-container">
                 <div className="section-header">
-                    <span className="section-tag scroll-fade-up" data-parallax="0.05">SEAMLESS ACROSS DEVICES</span>
-                    <h2 className="section-title scroll-fade-up" style={{ '--delay': '0.1s' }} data-parallax="0.08">
-                        Work from anywhere,<br />stay in sync
-                    </h2>
+                    <div className="scroll-fade-up">
+                        <span className="section-tag">SEAMLESS ACROSS DEVICES</span>
+                    </div>
+                    <div className="scroll-fade-up" style={{ '--delay': '0.1s' }}>
+                        <h2 className="section-title">
+                            Work from anywhere,<br />stay in sync
+                        </h2>
+                    </div>
                 </div>
-                <div className="phone-mockup scroll-fade-up" style={{ '--delay': '0.2s' }} data-parallax="0.1">
+                <div className="phone-mockup scroll-fade-up" style={{ '--delay': '0.2s' }}>
                     <div className="phone-image-placeholder" ref={deviceContainerRef}>
                         {/* Device Content - Wrapper for proper button positioning */}
                         <div className="device-image-wrapper">
-                            {activeView === 'web' && (
+                            {/* Track handles Scaling + Sliding for both images together */}
+                            <div
+                                className={`device-track view-${activeView}`}
+                                style={{ '--scale': scrollScale }}
+                            >
+                                <img
+                                    src={mobileViewImage}
+                                    alt="Mobile App View"
+                                    className="device-display-image mobile-img"
+                                />
                                 <img
                                     src={ipadProImage}
                                     alt="Web App on iPad"
-                                    className="device-display-image"
-                                    style={{ transform: `scale(${scrollScale})` }}
+                                    className="device-display-image web-img"
                                 />
-                            )}
-                            {activeView === 'mobile' && (
-                                <div className="mobile-placeholder">
-                                    {/* Placeholder for mobile content */}
-                                </div>
-                            )}
+                            </div>
 
                             {/* Toggle Buttons - Inside wrapper, on the image */}
                             <div className="device-toggle-container">
