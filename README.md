@@ -1,16 +1,57 @@
-# React + Vite
+# Nevote
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Nevote** is an all-in-one SaaS platform designed to help freelancers, studios, and startups manage clients, projects, and payments without the chaos.
 
-Currently, two official plugins are available:
+![Nevote Hero Banner](src/assets/dashboard-mockup2.jpg)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Overview
 
-## React Compiler
+Nevote provides a unified workspace to:
+- **Track Finances**: Visualize earnings, expenses, and invoices.
+- **Manage Clients**: Keep all client communication and details in one place.
+- **Device Sync**: Seamless experience across Mobile and Web applications.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The project features a highly polished, animated landing page with parallax scroll effects, interactive device mockups, and a modern aesthetic.
 
-## Expanding the ESLint configuration
+## ✨ Key Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Dynamic Hero Section**: Interactive 3D-style dashboard presentation.
+- **Device Toggle**: Real-time switching between Mobile and Web App views with scroll-based zoom animations.
+- **Trusted Brands**: Infinite scrolling marquee with "fancy" brand icons.
+- **Smooth Animations**: Custom CSS-based scroll reveal and fade-up effects.
+- **Responsive Design**: Fully optimized for all screen sizes.
+
+## 🛠️ Tech Stack
+
+- **Framework**: React 18
+- **Build Tool**: Vite
+- **Styling**: Vanilla CSS3 (Variables, Flexbox/Grid, Keyframe Animations)
+- **Icons**: Font Awesome 6
+- **Package Manager**: pnpm
+
+## 📦 Getting Started
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Kashii-00/Nevote.git
+   cd Nevote
+   ```
+
+2. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
+
+3. **Start the development server**
+   ```bash
+   pnpm dev
+   ```
+
+4. **Build for production**
+   ```bash
+   pnpm build
+   ```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
